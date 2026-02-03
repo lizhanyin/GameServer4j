@@ -1,10 +1,11 @@
 package org.jzy.game.common.config.server;
 
-import com.alibaba.fastjson.JSON;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-import javax.validation.constraints.Min;
+import com.alibaba.fastjson2.JSON;
+
+import jakarta.validation.constraints.Min;
 
 /**
  * 网关配置
@@ -88,6 +89,7 @@ public class GateConfig {
         this.publicIp = publicIp;
     }
 
+    @Override
     public String toString() {
         return JSON.toJSONString(this);
     }

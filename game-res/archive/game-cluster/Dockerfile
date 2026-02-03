@@ -1,4 +1,4 @@
-FROM openjdk:14-jdk-alpine
+FROM openjdk:25-jdk-alpine
 
 COPY target/lib /usr/src/mmo-cluster/lib
 COPY target/mmo-cluster-releases.jar /usr/src/mmo-cluster/mmo-cluster-releases.jar

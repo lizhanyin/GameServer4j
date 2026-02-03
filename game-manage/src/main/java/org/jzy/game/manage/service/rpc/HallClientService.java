@@ -1,13 +1,12 @@
 package org.jzy.game.manage.service.rpc;
 
 import org.apache.curator.x.discovery.ServiceInstance;
+import org.jzy.game.common.config.server.ServiceConfig;
 import org.jzy.game.common.constant.GlobalProperties;
 import org.jzy.game.common.constant.ServiceName;
 import org.jzy.game.common.constant.ZKNode;
 import org.jzy.game.common.service.AbstractMicroServiceClientService;
-import org.jzy.game.common.struct.service.ApiServiceInfo;
 import org.jzy.game.common.struct.service.HallServiceInfo;
-import org.jzy.game.proto.AccountServiceGrpc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +33,7 @@ public class HallClientService extends AbstractMicroServiceClientService<HallSer
     }
 
     @Override
-    public HallServiceInfo buildIMicroserviceInfo(ServiceInstance serviceInstance) {
+    public HallServiceInfo buildIMicroserviceInfo(ServiceInstance<ServiceConfig> serviceInstance) {
         String url = serviceInstance.getAddress() + ":" + serviceInstance.getPort();
         return new HallServiceInfo(serviceInstance.getId(), url, serviceInstance.getName());
     }

@@ -1,4 +1,4 @@
-FROM openjdk:14-jdk
+FROM openjdk:25-jdk
 
 COPY target/lib /usr/src/game-gate/lib
 COPY target/game-gate-releases.jar /usr/src/game-gate/game-gate-releases.jar

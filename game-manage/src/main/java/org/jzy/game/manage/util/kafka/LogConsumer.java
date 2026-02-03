@@ -1,7 +1,6 @@
 package org.jzy.game.manage.util.kafka;
 
-import com.alibaba.fastjson.JSON;
-import kafka.utils.ShutdownableThread;
+import com.alibaba.fastjson2.JSON;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
@@ -14,15 +13,17 @@ import org.slf4j.LoggerFactory;
 import java.time.Duration;
 import java.util.Collection;
 import java.util.Properties;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * 日志消费者
  */
-public class LogConsumer extends ShutdownableThread {
+public class LogConsumer extends Thread {
     public static final Logger LOGGER = LoggerFactory.getLogger(LogConsumer.class);
     private final KafkaConsumer<String, String> consumer;
     private final String groupId;
-    private Collection<String> topics;
+    private final Collection<String> topics;
+    private final AtomicBoolean running = new AtomicBoolean(true);
 
     /**
      *
@@ -33,8 +34,9 @@ public class LogConsumer extends ShutdownableThread {
     public LogConsumer(Collection<String> topics,
                        final String groupId,
                        final String url) {
-        super("KafkaConsumer" + groupId, false);
+        super("KafkaConsumer" + groupId);
         this.groupId = groupId;
+        this.topics = topics;
         Properties props = new Properties();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, url);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
@@ -51,31 +53,39 @@ public class LogConsumer extends ShutdownableThread {
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
 
         consumer = new KafkaConsumer<>(props);
-        this.topics = topics;
         consumer.subscribe(this.topics);
     }
 
-    KafkaConsumer get() {
+    KafkaConsumer<String, String> get() {
         return consumer;
     }
 
-    @Override
-    public void doWork() {
-
-        ConsumerRecords<String, String> records = consumer.poll(Duration.ofSeconds(1));
-        for (ConsumerRecord<String, String> record : records) {
-            LOGGER.debug(groupId + " received message : from partition " + record.partition() + ", (" + record.topic() + "," + record.key() + ", " + record.value() + ") at offset " + record.offset());
-            LogTopic logTopic = LogTopic.getLogTopic(record.topic());
-            switch (logTopic) {
-                case Login -> {
-                    LoginLog loginLog = JSON.parseObject(record.value(), LoginLog.class);
-                    //TODO 存数据库
-                    //  LOGGER.info("Login Log:{}",record.value());
-                }
-            }
-        }
-        consumer.commitAsync();
+    /**
+     * 停止消费者
+     */
+    public void shutdown() {
+        running.set(false);
+        consumer.wakeup();
     }
 
-
+    @Override
+    public void run() {
+        try (consumer) {
+            while (running.get()) {
+                ConsumerRecords<String, String> records = consumer.poll(Duration.ofSeconds(1));
+                for (ConsumerRecord<String, String> record : records) {
+                    LOGGER.debug(groupId + " received message : from partition " + record.partition() + ", (" + record.topic() + "," + record.key() + ", " + record.value() + ") at offset " + record.offset());
+                    LogTopic logTopic = LogTopic.getLogTopic(record.topic());
+                    switch (logTopic) {
+                        case Login -> {
+                            LoginLog loginLog = JSON.parseObject(record.value(), LoginLog.class);
+                            //TODO 存数据库
+                             LOGGER.info("Login Log:{}", loginLog);
+                        }
+                    }
+                }
+                consumer.commitAsync();
+            }
+        }
+    }
 }

@@ -23,31 +23,29 @@ public class GameToGateMessageCodec extends ByteToMessageCodec<Object> {
 
     @Override
     protected void encode(ChannelHandlerContext ctx, Object msg, ByteBuf out) throws Exception {
-        if (msg instanceof ByteBuf) {
-            out.writeBytes((ByteBuf) msg);
-        } else if (msg instanceof IdMessage) {
-            IdMessage idMessage=(IdMessage)msg;
-            if(idMessage.getMsg() instanceof byte[]) {
-                byte[] bytes=(byte[])idMessage.getMsg();
-                out.writeInt(HEADER_EXCLUDE_LENGTH +bytes.length);
-                out.writeInt(idMessage.getMsgId());
-                out.writeLong(idMessage.getId());
-                out.writeInt(idMessage.getMsgSequence());
-                out.writeBytes(bytes);
-            }else if(idMessage.getMsg() instanceof Message){
-                Message message = (Message) idMessage.getMsg();
-                byte[] bytes = message.toByteArray();
-                out.writeInt(HEADER_EXCLUDE_LENGTH + bytes.length);
-                out.writeInt(idMessage.getMsgId());
-                out.writeLong(idMessage.getId());
-                out.writeInt(idMessage.getMsgSequence());
-                out.writeBytes(bytes);
-            }else {
-                LOGGER.warn("IDMessage加密类型{}未实现", idMessage.getMsg().getClass().getSimpleName());
+        switch (msg) {
+            case ByteBuf byteBuf -> out.writeBytes(byteBuf);
+            case IdMessage idMessage -> {
+                switch (idMessage.getMsg()) {
+                    case byte[] bytes -> {
+                        out.writeInt(HEADER_EXCLUDE_LENGTH +bytes.length);
+                        out.writeInt(idMessage.getMsgId());
+                        out.writeLong(idMessage.getId());
+                        out.writeInt(idMessage.getMsgSequence());
+                        out.writeBytes(bytes);
+                    }
+                    case Message message -> {
+                        byte[] bytes = message.toByteArray();
+                        out.writeInt(HEADER_EXCLUDE_LENGTH + bytes.length);
+                        out.writeInt(idMessage.getMsgId());
+                        out.writeLong(idMessage.getId());
+                        out.writeInt(idMessage.getMsgSequence());
+                        out.writeBytes(bytes);
+                    }
+                    default -> LOGGER.warn("IDMessage加密类型{}未实现", idMessage.getMsg().getClass().getSimpleName());
+                }
             }
-        } else {
-            LOGGER.warn("未知的数据类型{}", msg.getClass().getName());
-            return;
+            default -> LOGGER.warn("未知的数据类型{}", msg.getClass().getName());
         }
 
     }

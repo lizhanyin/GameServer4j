@@ -98,7 +98,7 @@ public class PlayerRepository implements IPlayerRepository {
     }
 
     @Override
-    public Iterable<Player> findAllById(Iterable<Long> ids) {
+    public List<Player> findAllById(Iterable<Long> ids) {
         // TODO Auto-generated method stub
         return null;
     }

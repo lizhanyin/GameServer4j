@@ -6,7 +6,7 @@ import static scala.compat.java8.FutureConverters.toJava;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 
 import org.mmo.db.memory.message.CacheType;
 import org.mmo.db.memory.message.GetRequest;

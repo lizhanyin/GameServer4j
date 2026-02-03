@@ -1,7 +1,7 @@
 package org.jzy.game.common.struct.logger;
 
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 
 /**
  * 日志

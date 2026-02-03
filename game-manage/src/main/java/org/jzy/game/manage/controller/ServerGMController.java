@@ -33,7 +33,7 @@ public class ServerGMController {
      * @return
      */
     @RequestMapping("/server/gm/load/scripts")
-    public ResponseEntity loadScript(int serverType, int serverId, String path) {
+    public ResponseEntity<?> loadScript(int serverType, int serverId, String path) {
         return serverGMService.loadScript(serverType, serverId, path);
     }
 
@@ -49,7 +49,7 @@ public class ServerGMController {
      * @return
      */
     @RequestMapping("/server/gm/close")
-    public ResponseEntity closeServer(int serverType, int serverId) {
+    public ResponseEntity<?> closeServer(int serverType, int serverId) {
         return serverGMService.closeServer(serverType, serverId);
     }
 

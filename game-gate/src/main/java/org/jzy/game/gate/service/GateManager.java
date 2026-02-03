@@ -7,7 +7,7 @@ import org.jzy.game.gate.tcp.user.UserTcpService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 
 /**
  * 各种service注入

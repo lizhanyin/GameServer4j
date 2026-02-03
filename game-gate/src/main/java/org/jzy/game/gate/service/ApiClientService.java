@@ -1,12 +1,12 @@
 package org.jzy.game.gate.service;
 
 import org.apache.curator.x.discovery.ServiceInstance;
+import org.jzy.game.common.config.server.ServiceConfig;
 import org.jzy.game.common.constant.GlobalProperties;
 import org.jzy.game.common.constant.ServiceName;
 import org.jzy.game.common.constant.ZKNode;
 import org.jzy.game.common.service.AbstractMicroServiceClientService;
 import org.jzy.game.common.struct.service.ApiServiceInfo;
-import org.jzy.game.common.struct.service.IMicroserviceInfo;
 import org.jzy.game.proto.AccountServiceGrpc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,7 +34,7 @@ public class ApiClientService extends AbstractMicroServiceClientService<ApiServi
     }
 
     @Override
-    public ApiServiceInfo buildIMicroserviceInfo(ServiceInstance serviceInstance) {
+    public ApiServiceInfo buildIMicroserviceInfo(ServiceInstance<ServiceConfig> serviceInstance) {
         String url = serviceInstance.getAddress() + ":" + serviceInstance.getPort();
         return new ApiServiceInfo(serviceInstance.getId(), url, serviceInstance.getName());
     }

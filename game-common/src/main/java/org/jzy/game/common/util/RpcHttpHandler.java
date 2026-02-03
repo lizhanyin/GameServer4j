@@ -1,6 +1,6 @@
 package org.jzy.game.common.util;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import com.jzy.javalib.base.util.StringUtil;
 import com.jzy.javalib.network.io.handler.RpcHandler;
 import org.jzy.game.proto.HttpRequest;

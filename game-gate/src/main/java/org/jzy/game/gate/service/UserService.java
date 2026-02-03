@@ -1,10 +1,11 @@
 package org.jzy.game.gate.service;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import com.google.common.cache.*;
-import com.google.protobuf.Message;
 import com.jzy.javalib.network.io.message.MsgUtil;
+
 import io.netty.channel.Channel;
+
 import org.jzy.game.common.constant.OfflineType;
 import org.jzy.game.gate.struct.User;
 import org.jzy.game.gate.tcp.user.UserTcpServerHandler;
@@ -12,11 +13,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
-import java.util.Date;
+import jakarta.annotation.PostConstruct;
+
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -46,16 +48,13 @@ public class UserService {
      */
     private final LoadingCache<String, Integer> ipConnectCounts = CacheBuilder.newBuilder().maximumSize(5000)
             .concurrencyLevel(Runtime.getRuntime().availableProcessors()).expireAfterWrite(120, TimeUnit.MINUTES)
-            .removalListener(new RemovalListener<String, Integer>() {
-                @Override
-                public void onRemoval(RemovalNotification<String, Integer> notification) {
-                    if (notification.getValue() > 10) {
-                        LOGGER.info("IP:{} 创建了 {} 个连接", notification.getKey(), notification.getValue());
-                    }
+            .removalListener((RemovalNotification<String, Integer> notification) -> {
+                if (notification.getValue() > 10) {
+                    LOGGER.info("IP:{} 创建了 {} 个连接", notification.getKey(), notification.getValue());
                 }
-            }).build(new CacheLoader<String, Integer>() {
+    }).build(new CacheLoader<String, Integer>() {
                 @Override
-                public Integer load(String key) throws Exception {
+                public Integer load(@SuppressWarnings("null") String key) throws Exception {
                     return 0;
                 }
             });
@@ -141,7 +140,7 @@ public class UserService {
             count = count + 1;
             ipConnectCounts.put(ip, count);
             return count;
-        } catch (Exception e) {
+        } catch (ExecutionException e) {
             LOGGER.error("连接数统计", e);
         }
         return 0;
@@ -163,7 +162,7 @@ public class UserService {
                 ipConnectCounts.put(ip, count);
             }
             return count;
-        } catch (Exception e) {
+        } catch (ExecutionException e) {
             LOGGER.error("连接数统计", e);
         }
         return 0;

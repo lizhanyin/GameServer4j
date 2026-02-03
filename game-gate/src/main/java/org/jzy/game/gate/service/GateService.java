@@ -4,13 +4,10 @@ import com.jzy.javalib.base.script.ScriptManager;
 import com.jzy.javalib.base.util.TimeUtil;
 import com.jzy.javalib.network.io.handler.HandlerManager;
 import com.jzy.javalib.network.scene.AbstractScene;
-import org.apache.curator.framework.CuratorFramework;
-import org.apache.curator.framework.state.ConnectionState;
 import org.apache.curator.utils.CloseableUtils;
 import org.apache.curator.x.discovery.ServiceCache;
 import org.apache.curator.x.discovery.ServiceInstance;
 import org.apache.curator.x.discovery.UriSpec;
-import org.apache.curator.x.discovery.details.ServiceCacheListener;
 import org.jzy.game.common.config.server.GateConfig;
 import org.jzy.game.common.config.server.ServiceConfig;
 import org.jzy.game.common.constant.ServiceName;
@@ -23,8 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 
 /**
  * 网关服务器管理

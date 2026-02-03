@@ -1,17 +1,13 @@
 package org.jzy.game.api.db;
 
 import com.mongodb.client.MongoClients;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoClientDatabaseFactory;
-import org.springframework.data.mongodb.core.SimpleMongoClientDbFactory;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 
 /**
  * mongodb服务管理
@@ -31,7 +27,9 @@ public class MongoDbService {
 
     @PostConstruct
     public void init() {
-        mongoOperations = new MongoTemplate(new SimpleMongoClientDatabaseFactory(MongoClients.create(url), database));
+        var mongoClient = MongoClients.create(url);
+        var mongoClientDatabaseFactory = new SimpleMongoClientDatabaseFactory(mongoClient, database);
+        mongoOperations = new MongoTemplate(mongoClientDatabaseFactory);
     }
 
     public MongoOperations getMongoOperations() {

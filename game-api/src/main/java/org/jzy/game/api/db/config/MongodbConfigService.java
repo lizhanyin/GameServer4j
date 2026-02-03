@@ -5,10 +5,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoClientDatabaseFactory;
-import org.springframework.data.mongodb.core.SimpleMongoClientDbFactory;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 
 /**
  * mongodb数据库配置数据
@@ -19,7 +18,7 @@ import javax.annotation.PostConstruct;
 @Service
 public class MongodbConfigService {
 
-    private MongoOperations  mongoOperations;
+    private MongoOperations mongoOperations;
 
     @Value("${config.mongodb.url}")
     private String url;
@@ -27,14 +26,14 @@ public class MongodbConfigService {
     private String database;
 
     @PostConstruct
-    public void init(){
-        mongoOperations = new MongoTemplate(new SimpleMongoClientDatabaseFactory(MongoClients.create(url), database));
+    public void init() {
+        var mongoClient = MongoClients.create(url);
+        var mongoClientDatabaseFactory = new SimpleMongoClientDatabaseFactory(mongoClient, database);
+        mongoOperations = new MongoTemplate(mongoClientDatabaseFactory);
     }
 
     public MongoOperations getMongoOperations() {
         return mongoOperations;
     }
-
-
 
 }

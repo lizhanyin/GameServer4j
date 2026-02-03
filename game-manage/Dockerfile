@@ -1,4 +1,4 @@
-FROM openjdk:14-jdk
+FROM openjdk:25-jdk
 
 COPY target/lib /usr/src/game-manage/lib
 COPY target/game-manage-releases.jar /usr/src/game-manage/game-manage-releases.jar

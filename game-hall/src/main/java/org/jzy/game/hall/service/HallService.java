@@ -27,8 +27,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -56,6 +56,7 @@ public class HallService extends AbstractScene {
     private GlobalProperties globalProperties;
     @Autowired
     private GateInfoService gateInfoService;
+    @SuppressWarnings("unused")
     @Autowired
     private MongoGameService mongoGameService;
     @Autowired
@@ -100,7 +101,7 @@ public class HallService extends AbstractScene {
      * @throws Exception
      */
     private void initZkService() throws Exception {
-        long now = TimeUtil.currentTimeMillis();
+        // long now = TimeUtil.currentTimeMillis();
         //推送配置
         zkClientService.pushConfig(ZKNode.HallConfig.getKey(globalProperties.getProfile(), hallConfig.getId()), hallConfig);
         zkClientService.starService(ZKNode.ServicePath.getKey(globalProperties.getProfile()), null);

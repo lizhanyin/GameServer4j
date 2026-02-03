@@ -1,6 +1,5 @@
 package org.jzy.game.manage.service;
 
-import com.alibaba.fastjson.JSONObject;
 import org.jzy.game.common.constant.ServerType;
 import org.jzy.game.common.struct.service.ApiServiceInfo;
 import org.jzy.game.common.struct.service.HallServiceInfo;
@@ -8,7 +7,6 @@ import org.jzy.game.manage.service.rpc.ApiClientService;
 import org.jzy.game.manage.service.rpc.HallClientService;
 import org.jzy.game.proto.CommonRpcServiceGrpc;
 import org.jzy.game.proto.HttpRequest;
-import org.jzy.game.proto.ServerRegisterUpdateRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,19 +42,19 @@ public class ServerGMService {
      * @param path       脚本路径|类
      * @return
      */
-    public ResponseEntity loadScript(int serverType, int serverId, String path) {
+    public ResponseEntity<String> loadScript(int serverType, int serverId, String path) {
         ServerType serverType2 = ServerType.valueOf(serverType);
         if (ServerType.NONE == serverType2) {
-            return new ResponseEntity(String.format("server type %d not exist", serverType), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(String.format("server type %d not exist", serverType), HttpStatus.NOT_FOUND);
         }
         CommonRpcServiceGrpc.CommonRpcServiceBlockingStub commonRpcServiceBlockingStub = getCommonRpcServiceBlockingStub(serverType2, serverId);
         if (commonRpcServiceBlockingStub == null) {
-            return new ResponseEntity(String.format("server id %d not exist", serverId), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(String.format("server id %d not exist", serverId), HttpStatus.NOT_FOUND);
         }
 
         var httpResponse = commonRpcServiceBlockingStub.withDeadlineAfter(5, TimeUnit.SECONDS).httpPost(HttpRequest.newBuilder().setPath("/server/reload/script").setJsonParam("").build());
 
-        return new ResponseEntity(httpResponse.getResult(), HttpStatus.OK);
+        return new ResponseEntity<>(httpResponse.getResult(), HttpStatus.OK);
     }
 
     /**
@@ -66,18 +64,18 @@ public class ServerGMService {
      * @param serverId
      * @return
      */
-    public ResponseEntity closeServer(int serverType, int serverId) {
+    public ResponseEntity<String> closeServer(int serverType, int serverId) {
         ServerType serverType2 = ServerType.valueOf(serverType);
         if (ServerType.NONE == serverType2) {
-            return new ResponseEntity(String.format("server type %d not exist", serverType), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(String.format("server type %d not exist", serverType), HttpStatus.NOT_FOUND);
         }
         CommonRpcServiceGrpc.CommonRpcServiceBlockingStub commonRpcServiceBlockingStub = getCommonRpcServiceBlockingStub(serverType2, serverId);
         if (commonRpcServiceBlockingStub == null) {
-            return new ResponseEntity(String.format("server id %d not exist", serverId), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(String.format("server id %d not exist", serverId), HttpStatus.NOT_FOUND);
         }
         var httpResponse = commonRpcServiceBlockingStub.withDeadlineAfter(5, TimeUnit.SECONDS).httpPost(HttpRequest.newBuilder().setPath("/server/gm/close").setJsonParam("").build());
         LOGGER.info("关服：{}", httpResponse.toString());
-        return new ResponseEntity(httpResponse.getResult(), HttpStatus.OK);
+        return new ResponseEntity<>(httpResponse.getResult(), HttpStatus.OK);
     }
 
 
@@ -102,8 +100,8 @@ public class ServerGMService {
                     return microServiceInfo.getCommonRpcServiceBlockingStub();
                 }
             }
+            default -> LOGGER.warn("server type {} id {} not exist", serverType, serverId);
         }
-        LOGGER.warn("server type {} id {} not exist", serverType, serverId);
         return null;
     }
 

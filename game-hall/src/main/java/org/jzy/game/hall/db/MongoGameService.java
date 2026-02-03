@@ -2,15 +2,13 @@ package org.jzy.game.hall.db;
 
 import com.mongodb.client.MongoClients;
 import org.jzy.game.common.config.server.HallConfig;
-import org.jzy.game.common.constant.GlobalProperties;
-import org.jzy.game.proto.MID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoClientDatabaseFactory;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 
 /**
  * 游戏数据配置

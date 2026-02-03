@@ -1,6 +1,7 @@
 package org.jzy.game.manage.service.rpc;
 
 import org.apache.curator.x.discovery.ServiceInstance;
+import org.jzy.game.common.config.server.ServiceConfig;
 import org.jzy.game.common.constant.GlobalProperties;
 import org.jzy.game.common.constant.ServiceName;
 import org.jzy.game.common.constant.ZKNode;
@@ -33,7 +34,7 @@ public class ApiClientService extends AbstractMicroServiceClientService<ApiServi
     }
 
     @Override
-    public ApiServiceInfo buildIMicroserviceInfo(ServiceInstance serviceInstance) {
+    public ApiServiceInfo buildIMicroserviceInfo(ServiceInstance<ServiceConfig> serviceInstance) {
         String url = serviceInstance.getAddress() + ":" + serviceInstance.getPort();
         return new ApiServiceInfo(serviceInstance.getId(), url, serviceInstance.getName());
     }

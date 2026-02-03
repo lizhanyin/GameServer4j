@@ -1,4 +1,4 @@
-FROM openjdk:14-jdk
+FROM openjdk:25-jdk
 
 COPY target/lib /usr/src/game-api/lib
 COPY target/game-api-releases.jar /usr/src/game-api/game-api-releases.jar

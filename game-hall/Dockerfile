@@ -1,4 +1,4 @@
-FROM openjdk:14-jdk
+FROM openjdk:25-jdk
 
 COPY target/lib /usr/src/game-hall/lib
 COPY target/game-hall-releases.jar /usr/src/game-hall/game-hall-releases.jar
