@@ -1,8 +1,6 @@
-
+@echo off
 rem must copy file...
 
 docker image build -t game-manage:releases .
 
-rd /s/q game-manage-scripts
-
-
+if exist game-manage-scripts rd /s/q game-manage-scripts

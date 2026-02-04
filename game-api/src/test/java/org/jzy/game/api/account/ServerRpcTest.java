@@ -3,8 +3,8 @@ package org.jzy.game.api.account;
 import com.alibaba.fastjson2.JSONObject;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.jzy.game.proto.*;
 
 import java.text.MessageFormat;
@@ -21,7 +21,7 @@ public class ServerRpcTest {
     CommonRpcServiceGrpc.CommonRpcServiceStub commonRpcServiceStub;
     CommonRpcServiceGrpc.CommonRpcServiceBlockingStub commonRpcServiceBlockingStub;
 
-    @Before
+    @BeforeEach
     public void init() {
         channel = ManagedChannelBuilder.forTarget("127.0.0.1:7000").usePlaintext().build();
         commonRpcServiceStub = CommonRpcServiceGrpc.newStub(channel);

@@ -53,6 +53,7 @@ public class ApiService extends AbstractScene {
     private ZkClientService zkClientService;
     @Autowired
     private GlobalProperties globalProperties;
+    @SuppressWarnings("unused")
     @Autowired
     private KafkaProducerService kafkaProducerService;
     @Autowired

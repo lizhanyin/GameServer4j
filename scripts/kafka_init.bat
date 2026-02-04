@@ -1,30 +1,32 @@
 @echo off
+chcp 65001
+
 echo ============================================
-echo Kafka ³õÊ¼»¯½Å±¾
+echo Kafka åˆå§‹åŒ–è„šæœ¬
 echo ============================================
 echo.
 
 if exist uuid.txt (
-    echo ·¢ÏÖÒÑ´æÔÚµÄ UUID:
+    echo å‘ç°å·²å­˜åœ¨çš„ UUID:
     set /p UUID=<uuid.txt
     echo %UUID%
     echo.
-    set /p REUSE="ÊÇ·ñÊ¹ÓÃÏÖÓĞ UUID? (Y/N): "
+    set /p REUSE="æ˜¯å¦ä½¿ç”¨ç°æœ‰ UUID? (Y/N): "
     if /i "%REUSE%"=="Y" goto format
 )
 
-echo [1/2] Éú³ÉËæ»ú UUID...
+echo [1/2] ç”Ÿæˆéšæœº UUID...
 .\bin\windows\kafka-storage.bat random-uuid 2>&1 | findstr /v "ERROR Reconfiguration" > uuid.txt
 set /p UUID=<uuid.txt
 echo UUID: %UUID%
 echo.
 
 :format
-echo [2/2] ¸ñÊ½»¯ Kafka ´æ´¢...
+echo [2/2] æ ¼å¼åŒ– Kafka å­˜å‚¨...
 .\bin\windows\kafka-storage.bat format --standalone -t %UUID% -c .\config\server.properties
 echo.
 
 echo ============================================
-echo ³õÊ¼»¯Íê³É!
+echo åˆå§‹åŒ–å®Œæˆ!
 echo ============================================
 pause

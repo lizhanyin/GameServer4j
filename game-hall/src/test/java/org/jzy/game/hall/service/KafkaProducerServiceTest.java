@@ -1,7 +1,7 @@
 package org.jzy.game.hall.service;
 
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.jzy.game.common.constant.LogTopic;
 import org.jzy.game.common.service.KafkaProducerService;
 
@@ -9,7 +9,7 @@ import org.jzy.game.common.service.KafkaProducerService;
  * @author jzy
  * @mail 359135103@qq.com
  */
-//@Ignore
+@Disabled
 public class KafkaProducerServiceTest {
 
     @Test
