@@ -25,4 +25,4 @@ log/
 target/
 **/target/
 
-
+.spec-workflow
